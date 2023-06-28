@@ -1,0 +1,36 @@
+body { 
+    background-color: #2C66B8;
+    color: #F5F5F5;
+    margin: 0px;
+}
+
+#banner {
+    width: 100%;
+    height: 100px;
+
+    margin-top: 20px;
+    background-color: #4A7CC2;
+
+    border-top: 5px solid #7198C1;
+    border-bottom: 5px solid #7198C1;
+
+    box-shadow: 0px 10px 10px #2659A1;
+
+    font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 28px;
+    text-align: center;
+
+}
+
+#banner>h1 {
+ 
+    color: #F34F29;
+    margin-top: 0;
+    margin-bottom: 0;
+  
+}
+
+#graph-svg {
+    margin: auto;
+    margin-left: 25%;
+}
