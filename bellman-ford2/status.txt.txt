@@ -1,0 +1,11 @@
+July 12
+=======
+
+  Added the code from the web site (more complete version)
+     https://www.geeksforgeeks.org/bellman-ford-algorithm-dp-23/
+     
+  And did copy the rendering classes of the previous tree project
+  
+  The node are visible after the rendering, but there is a difference with the edges,
+  as we have weighted edges and directed (unlike tree, where it was not directed)
+  Therefore, the  drawSegment and drawPath require changes to work 
