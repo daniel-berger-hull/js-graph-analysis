@@ -1,0 +1,21 @@
+Nov 2, 2023
+===========
+
+  This project is using edge with no weights (all edges have the same weight of 1 implicitely)
+  And the other graph project Bellman-Ford is using Nodes and Edges with weight, so in some way, the Bellman-Ford is a bit more sophisticated.
+
+
+  To Do:
+  ------
+
+    * Introduce the weight into this project (copy the Bellman-Ford GraphModel.js class into this project)
+
+June 13
+========
+
+  Starting project of Graph traversal based on the following article:  https://www.geeksforgeeks.org/depth-first-search-or-dfs-for-a-graph/
+
+  To Do:
+  -----
+  * Need to develop other method/class for the positionning of the graph's node (only NodeSpaceLocator.js for the moment)
+  * Need to highlight the path from one selected node to all the other nodes in color
