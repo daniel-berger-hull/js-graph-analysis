@@ -7,7 +7,6 @@ export class Graph {
 
     #nodeIndexesPath;
     
-  
     constructor(nbrNodes)
     {
         this.nbrNodes = nbrNodes;

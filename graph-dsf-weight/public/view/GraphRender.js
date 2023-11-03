@@ -120,6 +120,8 @@ export class GraphRender {
 
     drawSegments(ctx, graph, nodePosArray) {
 
+        console.log("%c drawSegments","color: red");
+
         for (let i=0;i<graph.size();i++) {
             const nextNodeValue = graph.getNodeValue(i);
             const startNodePos =   { x: nodePosArray[i].x,        
@@ -129,17 +131,30 @@ export class GraphRender {
             const edges =  graph.getEdgesForNode(i);
 
             // 2 Type of segments here: A) The regular from Node x to y, at different location B) A special case, where a node points to itself and an arc from and to the node has to be draw...
-            edges.forEach( index => { 
+            // edges.forEach( index => { 
 
-                if (index !== i) {
+            //     if (index !== i) {
+            //        // console.log(i + " to " + index);
+            //         const endNodePos =   { x: nodePosArray[index].x,   y: nodePosArray[index].y };
+            //         this.renderSegment(  ctx,  startNodePos,  endNodePos, "#00FF00"); 
+            //     } else {
+            //         console.log("Render: an edge on the same node detected!");
+            //         this.renderLoopSegment (ctx, startNodePos,  10, "#00FF00");
+            //     }
+            // });    
+            
+            edges.forEach( nextEdge => { 
+
+                if (nextEdge.dest !== nextEdge.src) {
                    // console.log(i + " to " + index);
-                    const endNodePos =   { x: nodePosArray[index].x,   y: nodePosArray[index].y };
+                    const endNodePos =   { x: nodePosArray[nextEdge.dest].x,   y: nodePosArray[nextEdge.dest].y };
                     this.renderSegment(  ctx,  startNodePos,  endNodePos, "#00FF00"); 
                 } else {
                     console.log("Render: an edge on the same node detected!");
                     this.renderLoopSegment (ctx, startNodePos,  10, "#00FF00");
                 }
-            });           
+               
+            });    
         }
     }
 
@@ -183,6 +198,7 @@ export class GraphRender {
         const nodePositions = determinePos( graph, this.getCanvasSpecs(), this.getRenderingMode()  );
 
         this.drawSegments(ctx, graph, nodePositions);
+        // Nov 3: Needs to adapte the DFS to fit with the Weighted graph, as the original DFS implemation in Graph.js, is dealing with no weights on the nodes
         this.drawPath(ctx, graph, nodePositions);
         this.drawNodes(ctx, nodePositions);
     }

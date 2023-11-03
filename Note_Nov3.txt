@@ -1,0 +1,6 @@
+Nov 3
+=====
+
+   Get some progress to have a DFS on the weighted graph in the project graph-dsf-weight.
+   The result is a bit wrong dough, as there are nodes where there is no connected nodes where the path goes.
+   Look at the debug windows... (the node index #2 as NO connected nodes, but it is in the path)

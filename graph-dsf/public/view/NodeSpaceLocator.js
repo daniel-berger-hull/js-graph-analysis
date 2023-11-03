@@ -161,7 +161,7 @@ function randomPositions(graph, centerPos,radius) {
         positions.push( {x:x, y:y} );
     }
 
-    return positions;
+    return positions;cl
 
 
 }

@@ -1,6 +1,8 @@
 
 "use strict";
-import { Graph }      from './model/Graph.js';
+// import { Graph }      from './model/Graph.js';
+import { BellmanFord, GraphObject, Edge }  from './model/GraphModel.js';
+
 import { GraphRender}   from './view/GraphRender.js';
 
 import { CIRCULAR_GRAPH_RENDERING  , CONCENTRIC_GRAPH_RENDERING  ,RANDOM_GRAPH_RENDERING  } from './view/RenderingConstants.js';
@@ -14,7 +16,8 @@ const MAX_EDGE_NUMBER  = 2;
 const ERROR_MESSAGE_TIMEOUT = 3000;
 
 
-let graph;
+// let graph;
+let graphObject;
 
 
 let renderingMode = CIRCULAR_GRAPH_RENDERING;
@@ -29,7 +32,6 @@ let renderingMode = CIRCULAR_GRAPH_RENDERING;
 const setEventHandlers  = () => {
     console.log("setEventHandlers");
 
-  
      window.addEventListener("resize", windowResizeHandler );
      document.addEventListener('keydown', keydownHandler );
 
@@ -83,13 +85,13 @@ const dfsButtonClickHandler  = () => {
     }
     
 
-      if ( (value < 0) || (value > graph.size()) ) {
+      if ( (value < 0) || (value > graphObject.size()) ) {
 
         displayWarningMessage("Invalid Node Index entered!");
         return;
       }
     
-      graph.setSelectedNode(value);
+      graphObject.setSelectedNode(value);
 
       render();
 
@@ -98,7 +100,7 @@ const dfsButtonClickHandler  = () => {
 const dfsAllPathButtonClickHandler  = () => {
 
 
-    const nbrNodes = graph.size();
+    const nbrNodes = graphObject.size();
 
     console.log("Find path for all " + nbrNodes + "Nodes");
 
@@ -106,8 +108,8 @@ const dfsAllPathButtonClickHandler  = () => {
 
     for (let i=0;i<nbrNodes;i++) {
 
-        graph.setSelectedNode(i);
-        const path = graph.DFS(i);
+        graphObject.setSelectedNode(i);
+        const path = graphObject.DFS(i);
         console.log(`${i} - ${path}`);
 
         if (path.length === nbrNodes) 
@@ -144,35 +146,79 @@ const renderingButtonClickHandler = (event) => {
 
 export const init = () => {
 
-    //const nbrNodes = Math.round( Math.random() * MAX_NODE_NUMBER ) + 5;
     const nbrNodes = 8;
     
-    graph = new Graph(nbrNodes);
+    
+    // Nov 3: this section should go and use the GraphObject instead...
+    // graph = new Graph(nbrNodes);
+    // console.log("Init callled total nodes number is " + nbrNodes);
+    // for (let i=0;i<nbrNodes;i++) {
 
-    console.log("Init callled total nodes number is " + nbrNodes);
+    //     const nodeValue = Math.round( Math.random() * MAX_NODE_VALUE ) + 1;
+    //     const edges = getRandomEdgeIndexes(i,nbrNodes);
 
-    for (let i=0;i<nbrNodes;i++) {
+    //     console.log(`${i} -- ${edges} `);
 
-        const nodeValue = Math.round( Math.random() * MAX_NODE_VALUE ) + 1;
-        const edges = getRandomEdgeIndexes(i,nbrNodes);
+    //     edges.forEach(index => {
+    //         graph.addEdge(i, index);
+    //     });
 
-        console.log(`${i} -- ${edges} `);
+    //     graph.setNodeValue(i,nodeValue);
 
-        edges.forEach(index => {
-            graph.addEdge(i, index);
-        });
-
-        graph.setNodeValue(i,nodeValue);
-
-    }
+    // }
 
 
     setEventHandlers();
+
+    initBellman(nbrNodes);
 
     // By default, the rendering mode is circular
     document.getElementById('circular-rendering').checked = true;
 
 }
+
+function initBellman (nbrNodes) {
+
+    const V = 7;
+    const E = nbrNodes;
+    graphObject = new GraphObject(V, E);
+
+    // Nov 3
+    // graphObject.edges[0] = new Edge(0, 1, 1);
+    // graphObject.edges[1] = new Edge(0, 2, 4);
+    // graphObject.edges[2] = new Edge(1, 2, 3);
+    // graphObject.edges[3] = new Edge(1, 3, 2);
+    // graphObject.edges[4] = new Edge(1, 4, 2);
+    // graphObject.edges[5] = new Edge(3, 2, 5);
+    // graphObject.edges[6] = new Edge(3, 1, 1);
+    // graphObject.edges[7] = new Edge(4, 3, 3);
+
+    graphObject.addEdge(0, 1, 1);
+    graphObject.addEdge(0, 2, 4);
+    graphObject.addEdge(1, 2, 3);
+    graphObject.addEdge(1, 3, 2);
+    graphObject.addEdge(1, 4, 2);
+    graphObject.addEdge(3, 2, 5);
+    graphObject.addEdge(3, 1, 1);
+    graphObject.addEdge(4, 3, 3);
+    graphObject.addEdge(4, 6, 3);
+    graphObject.addEdge(5, 2, 2);
+
+
+    for (let i=0;i<graphObject.getNbrNodes();i++) {
+        graphObject.setNodeValue(i,i*10);
+    }
+    
+    
+
+    console.log(`initBellman:\nNode Count ${graphObject.getNbrNodes()} \nEdge number is  ${graphObject.getNbrEdges()}`);
+    console.log("Nodes Values:")
+    for (let i=0;i<graphObject.getNbrNodes();i++) {
+        console.log(`${i}  -> ${graphObject.getNodeValue(i)}`)
+    }
+}
+
+
 
 
 
@@ -184,7 +230,8 @@ export const render = () => {
 
 
 
-    let renderObject = new GraphRender(canvas,graph,renderingMode);
+    // let renderObject = new GraphRender(canvas,graph,renderingMode);    Nov 03
+    let renderObject = new GraphRender(canvas,graphObject,renderingMode);
     renderObject.draw();
 
     updateGraphDetailSection();
@@ -230,11 +277,20 @@ const hideWarningMessage= () => {
 const updateGraphDetailSection  = () => {
 
     
-    const nbrNodes =  graph.size();
+    const nbrNodes =  graphObject.size();
     for (let i=0;i<nbrNodes;i++) {
 
         const nodeValue = Math.round( Math.random() * MAX_NODE_VALUE ) + 1;    
-        console.log(i + " value is " + " [nodeValue, edges] --> " + graph.getEdgesForNode(i));
+
+        const edgesForThisNode = graphObject.getEdgesForNode(i);    // An array of class Edges
+        const connectedNodes = [];
+
+        edgesForThisNode.forEach(nextEdge => {  connectedNodes.push(nextEdge.dest);   }  );
+
+//        console.log(i + " value is " + " [nodeValue, edges] --> " + graphObject.getEdgesForNode(i));
+        console.log(i + " value is " + " [nodeValue, edges] --> " + connectedNodes);
+
+        
     }
 
     document.getElementById("NodeTotalCount").innerHTML = nbrNodes;
@@ -263,9 +319,6 @@ const getRandomEdgeIndexes = (currentIndex,nbrNodes) => {
 }
 
 
-export const test = () => {
-    console.log('Dan');
-}
 
 export const main = () => {
 

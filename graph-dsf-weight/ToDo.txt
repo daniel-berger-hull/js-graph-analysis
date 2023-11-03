@@ -1,0 +1,6 @@
+Nov 3, 2023
+------------
+
+ To Do:
+  * Should add the weigthed graph, instead of since connection node like it currently done.
+  * Should add a NodeJS and add Jest tests...
