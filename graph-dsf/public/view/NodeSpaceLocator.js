@@ -157,20 +157,6 @@ function randomPositions(graph, centerPos,radius) {
 
         const x = centerPos.xCenter - Math.round( 2 * radius * Math.random() - radius); 
         const y = centerPos.yCenter - Math.round( 2 * radius * Math.random() - radius); 
-        //const y = centerPos.yCenter;
-        //const y = 100;
-        
-    //     const angle = 2*Math.PI / n;
-
-    // let currentAngle = 0;
-    // for (let i=0;i<n;i++) {
-
-    //     const x = centerPos.xCenter - Math.round( radius * Math.sin(currentAngle) ); 
-    //     const y = centerPos.yCenter - Math.round( radius * Math.cos(currentAngle) ); 
-        
-        //const x = centerPos.xCenter - Math.round( 4 * radius * Math.random() ); 
-        //const y = centerPos.yCenter - Math.round( 4 * radius * Math.random() ); 
-        
 
         positions.push( {x:x, y:y} );
     }

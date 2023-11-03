@@ -164,7 +164,7 @@ export class GraphRender {
             this.renderSegment(  ctx,  startNodePos,  endNodePos, "#FF0000"); 
             
             startNodePos = endNodePos;
-                
+
         }
 
     }

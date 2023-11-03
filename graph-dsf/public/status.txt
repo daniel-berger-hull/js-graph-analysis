@@ -1,3 +1,15 @@
+Nov 2, 2023
+===========
+
+  This project is using edge with no weights (all edges have the same weight of 1 implicitely)
+  And the other graph project Bellman-Ford is using Nodes and Edges with weight, so in some way, the Bellman-Ford is a bit more sophisticated.
+
+
+  To Do:
+  ------
+
+    * Introduce the weight into this project (copy the Bellman-Ford GraphModel.js class into this project)
+
 June 13
 ========
 
