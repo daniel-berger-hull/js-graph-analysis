@@ -1,7 +1,7 @@
 
 "use strict";
 // import { Graph }      from './model/Graph.js';
-import { BellmanFord, GraphObject, Edge }  from './model/GraphModel.js';
+import { BellmanFord, GraphObject, Edge, shortestPath }  from './model/GraphModel.js';
 
 import { GraphRender}   from './view/GraphRender.js';
 
@@ -18,6 +18,7 @@ const ERROR_MESSAGE_TIMEOUT = 3000;
 
 // let graph;
 let graphObject;
+let graphObject2;
 
 
 let renderingMode = CIRCULAR_GRAPH_RENDERING;
@@ -171,6 +172,7 @@ export const init = () => {
     setEventHandlers();
 
     initBellman(nbrNodes);
+    initDijkstra(9);
 
     // By default, the rendering mode is circular
     document.getElementById('circular-rendering').checked = true;
@@ -212,13 +214,39 @@ function initBellman (nbrNodes) {
     
 
     console.log(`initBellman:\nNode Count ${graphObject.getNbrNodes()} \nEdge number is  ${graphObject.getNbrEdges()}`);
-    console.log("Nodes Values:")
-    for (let i=0;i<graphObject.getNbrNodes();i++) {
-        console.log(`${i}  -> ${graphObject.getNodeValue(i)}`)
-    }
+    // console.log("Nodes Values:")
+    // for (let i=0;i<graphObject.getNbrNodes();i++) {
+    //     console.log(`${i}  -> ${graphObject.getNodeValue(i)}`)
+    // }
 }
 
+function initDijkstra(nbrNodes) {
+   
+    
+    const V = 7;
+    const E = 9;
+    graphObject2 = new GraphObject(nbrNodes, 14);
 
+    graphObject2.addEdge(0, 1, 4);
+    graphObject2.addEdge(0, 7, 8);
+    graphObject2.addEdge(1, 2, 8);
+    graphObject2.addEdge(1, 7, 11);
+    graphObject2.addEdge(2, 3, 7);
+    graphObject2.addEdge(2, 8, 2);
+    graphObject2.addEdge(2, 5, 4);
+    graphObject2.addEdge(3, 4, 9);
+    graphObject2.addEdge(3, 5, 14);
+    graphObject2.addEdge(4, 5, 10);
+    graphObject2.addEdge(5, 6, 2);
+    graphObject2.addEdge(6, 7, 1);
+    graphObject2.addEdge(6, 8, 6);
+    graphObject2.addEdge(7, 8, 7);
+ 
+
+    shortestPath(graphObject2,0);
+
+
+}
 
 
 
@@ -288,7 +316,7 @@ const updateGraphDetailSection  = () => {
         edgesForThisNode.forEach(nextEdge => {  connectedNodes.push(nextEdge.dest);   }  );
 
 //        console.log(i + " value is " + " [nodeValue, edges] --> " + graphObject.getEdgesForNode(i));
-        console.log(i + " value is " + " [nodeValue, edges] --> " + connectedNodes);
+        // console.log(i + " value is " + " [nodeValue, edges] --> " + connectedNodes);
 
         
     }

@@ -1,6 +1,20 @@
+
+Nov 10, 2023
+------------
+
+   Started experiments on Dijkstras shortest path.  A test method been added to GraphModel.js 
+   The code comes from the web site: 
+            https://www.geeksforgeeks.org/dijkstras-shortest-path-algorithm-greedy-algo-7/ 
+   Adaptation to my own Graph Model (using an adgency matrix) done, and results given are correct (print out on the console for now)
+   
+  To Do:
+    * Try the Dijkstras algo on the main graph (which has less nodes than the Dijkstras example ) 
+
 Nov 3, 2023
 ------------
 
  To Do:
   * Should add the weigthed graph, instead of since connection node like it currently done.
   * Should add a NodeJS and add Jest tests...
+
+  

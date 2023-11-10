@@ -164,7 +164,7 @@ export class GraphRender {
         const seletectedNodeIndex = graph.getSelectedNode();
         const path = graph.DFS(seletectedNodeIndex);
       
-        console.log("Display path from node :" + seletectedNodeIndex);
+       // console.log("Seletected Node Index :" + seletectedNodeIndex);
 
         let startIndex = path[0];
         let startNodePos =   { x: nodePosArray[startIndex].x,        
@@ -172,13 +172,16 @@ export class GraphRender {
 
         for (let i=1;i<path.length;i++) {
 
+            startIndex = path[i-1];
             let endIndex = path[i];
             let endNodePos =   {   x: nodePosArray[endIndex].x,        
                                    y: nodePosArray[endIndex].y }; 
 
             this.renderSegment(  ctx,  startNodePos,  endNodePos, "#FF0000"); 
-            
+         //   console.log(`[startIndex,endIndex] = [${startIndex},${endIndex}]`);
+
             startNodePos = endNodePos;
+
         }
 
     }

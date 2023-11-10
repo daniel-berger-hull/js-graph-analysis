@@ -1,14 +1,15 @@
 "use strict";
 
+
+export const INF = 2147483647;
+
 export const DEFAULT_NODE_VALUE   = 9999;
 export const DEFAULT_EDGE_WEIGHT  = 1;
 
 
-// a structure to represent a connected, directed and
-// weighted graph
+// a structure to represent a connected, directed and weighted graph
 export class Edge {
-
-
+    
     src;
     dest;
     weight;
@@ -29,6 +30,8 @@ export class GraphObject {
 
 
 
+    // Nov 11: Having the nbr of Edges in the contructor is wrong!!!
+    //         Instead, It should increament at every call of addEdge method...
     constructor(nbrNodes, nbrEdges) {
 
         this.#nbrNodes = nbrNodes;
@@ -167,7 +170,7 @@ DFSUtil(v, visited)
 
     // Nov 3: This is for debug. As today, the DFS result is a bit odd... As it gives [0, 1, 2, 3, 4, 6].
     //        But there no edges between 2 and 3!!!
-    console.log(`DFSUtil Level: ${this.recursiveLevel}, Start Node: ${v}, Connected Nodes ${connectedNodes}, Index Path: ${this.#nodeIndexesPath} , Visited Array: ${visited}`);
+    //console.log(`DFSUtil Level: ${this.recursiveLevel}, Start Node: ${v}, Connected Nodes ${connectedNodes}, Index Path: ${this.#nodeIndexesPath} , Visited Array: ${visited}`);
 
     for(let i of connectedNodes) {
         let n = i
@@ -176,11 +179,6 @@ DFSUtil(v, visited)
     }
 
     this.recursiveLevel--;
-
-
-
-
-
 }
  
 // The function to do DFS traversal.
@@ -246,4 +244,66 @@ export function BellmanFord(graph, src) {
     }
     
 
-    
+
+
+   
+export function shortestPath(graph,src)
+      {
+
+        const nbrNodes = graph.getNbrNodes();
+          // Create a priority queue to store vertices that are being preprocessed. This is weird syntax in C++.
+          // Refer below link for details of this syntax
+          // https://www.geeksforgeeks.org/implement-min-heap-using-stl/
+          let pq = [];
+   
+          // Create a vector for distances and initialize all
+          // distances as infinite (INF)
+          let dist = new Array(nbrNodes).fill(INF);
+   
+          // Insert source itself in priority queue and initialize
+          // its distance as 0.
+          pq.push([0, src]);
+          dist[src] = 0;
+   
+          /* Looping till priority queue becomes empty (or all distances are not finalized) */
+          while (pq.length > 0) {
+              // The first vertex in pair is the minimum distance vertex, extract it from priority queue. vertex label is stored in second of pair (it
+              // has to be done this way to keep the vertices sorted distance (distance must be first item in pair)
+              let u = pq[0][1];
+              pq.shift();
+   
+
+            const connectedNodes = [];
+            const edgesForThisNode = graph.getEdgesForNode(u);    // Returns An array of class Edges
+              
+            edgesForThisNode.forEach(nextEdge => {  connectedNodes.push(nextEdge.dest);   }  );
+
+
+              // 'i' is used to get all adjacent vertices of a vertex
+            for(let i = 0; i < connectedNodes.length; i++){
+                                   
+                  // Get vertex label and weight of current adjacent of u.
+                let v = connectedNodes[i];
+                let currrentEdge = edgesForThisNode[i];
+                let weight =  currrentEdge.weight;
+                
+                  // If there is shorted path to v through u.
+                  if (dist[v] > dist[u] + weight) {
+                      // Updating distance of v
+                      dist[v] = dist[u] + weight;
+                      pq.push([dist[v], v]);
+                      pq.sort((a, b) =>{
+                          if(a[0] == b[0]) return a[1] - b[1];
+                          return a[0] - b[0];
+                      });
+                  }
+              }
+          }
+   
+          // Print shortest distances stored in dist[]
+          console.log("Dijkstra Distances from Node 0 to node#");
+          for (let i = 0; i < nbrNodes; ++i)
+            console.log(i + " --> " + dist[i]);
+  }
+  
+
