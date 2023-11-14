@@ -40,54 +40,58 @@
 
         
 
-        <div id="graph-detail-section">
+        <div class="page-section">
 
-             <div id="graph-detail-section-title">Details</div>
+             <div class="page-section-title">Details</div>
              
             <div>
                 <span>Node Count</span>
-                <span id="NodeTotalCount"></span>
+                <span id="NodeTotalCount" class="page-section-highlight-text"></span>
             </div>
+            <div>
+                <span>Edge Count</span>
+                <span id="EdgeTotalCount" class="page-section-highlight-text"></span>
+            </div>
+        </div>
 
-            <div> 
-                <span >Deep First Search</span>
-            </div>
-            <div id="detail-user-section" title="To see the path starting from a specific node, enter the node index and click on button DFS">
+        <div class="page-section">
+
+            <div class="page-section-title">Action</div>
+
+            <div> <span class="page-section-highlight-text" >Deep First Search</span> </div>
+
+            <div class="detail-user-section" title="To see the path starting from a specific node, enter the node index and click on button DFS">
                
                 <span >Start Node</span>
                 <input type="text" id="NodeToWorkOn" />
                 <button id="dfs-button">DFS</button>
                
-             
-
-                <div  id="warning-section">
-                    <img src="warning.png"  width="20px" height="20px"  />
-                    <span id="error-warning-msg">ddd</span>
-
-                </div>
+                
             </div>
             <div  title="Click on button All Path! and look into the browser's console. All the paths, starting from every node will be detailed">
                 <span >Search all paths</span>
                 <button id="dfs-all-path-button">All Paths!</button>
             </div>
-    
+
+            <div> <span class="page-section-highlight-text" >Disjkstras</span> </div>
+            <div class="detail-user-section" title="This demonstrate the shortest path using Disjkstras algorightm">
+               
+                <span >Start Node</span>
+                <input type="text" id="DisjkstrasStartNode" class="page-section-input"/>
+                <span >End  Node</span>
+                <input type="text" id="DisjkstrasEndNode" class="page-section-input"/>
+                <button id="disjkstras-button">Shortest Path</button>
+            </div>
+
+            <div  id="warning-section">
+                <img src="warning.png"  width="20px" height="20px"  />
+                <span id="error-warning-msg">ddd</span>
+            </div>
+
         </div>
     </div>
 
-    <script type="module">
-
-        //Nov 3: This import is bizare, as it tries to load the index.js...
-        //       To Do There should be a way to include the index.js, from the <script>  tag above   ( i.e <script src="index.js"type="module"> )
-        import { init,render } from './index.js';
-
-         //init();
-         //render(); 
-    </script> 
-
-
-
-
-
+    <script src="index.js" type="module"></script> 
 
 </body>
 </html>

@@ -1,4 +1,16 @@
 
+Nov 13, 2023
+------------
+
+   * Inclusion of the Dijkstras algo on the main graph included (but no rendering so far)
+
+   to Do:
+   * Dijkstras to return list of all nodes for a path   
+       (It currently return the total cost, which is a good, start bur for rendering, the full path with all nodes in the path are required)
+   * The Path methods (i.e DFS and shortestPath) should be extracted an put into their own files (and specilazed classes would be even better)
+
+
+
 Nov 10, 2023
 ------------
 

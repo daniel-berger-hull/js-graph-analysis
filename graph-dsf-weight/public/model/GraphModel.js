@@ -7,6 +7,8 @@ export const DEFAULT_NODE_VALUE   = 9999;
 export const DEFAULT_EDGE_WEIGHT  = 1;
 
 
+const NO_EDGES_DEFINED = 0;
+
 // a structure to represent a connected, directed and weighted graph
 export class Edge {
     
@@ -29,13 +31,12 @@ export class GraphObject {
     #nbrEdges;   // Nov 3: This value appears to be not required, as the getNbrEdges exists for this...
 
 
-
-    // Nov 11: Having the nbr of Edges in the contructor is wrong!!!
-    //         Instead, It should increament at every call of addEdge method...
-    constructor(nbrNodes, nbrEdges) {
+    constructor(nbrNodes) {
 
         this.#nbrNodes = nbrNodes;
-        this.#nbrEdges = nbrEdges;
+        //this.#nbrEdges = nbrEdges;
+        this.#nbrEdges = NO_EDGES_DEFINED;
+        
         this.edges = [];
 
         // Nov 3 Added to align with the older Graph.js --> Each node had no values in GraphObject
@@ -82,7 +83,7 @@ export class GraphObject {
 
 
     addEdge(fromNode, toNode ) {
-        this.addEdge(fromNode, toNode, DEFAULT_EDGE_WEIGHT)
+        this.addEdge(fromNode, toNode, DEFAULT_EDGE_WEIGHT);
     }
 
 
@@ -259,10 +260,32 @@ export function shortestPath(graph,src)
           // Create a vector for distances and initialize all
           // distances as infinite (INF)
           let dist = new Array(nbrNodes).fill(INF);
+          let counts = new Array(nbrNodes).fill(0);
+          
+
+          //let nodesPath = [];
+
+          let nodesPath = new Array(nbrNodes);
+
+         
+
+
+          //let nodesPath = [];
+          //nodesPath.push(src);
    
+
+          //nodesPath.push(src);
+
           // Insert source itself in priority queue and initialize
           // its distance as 0.
+//          pq.push([0, src]);   // Nov 13
           pq.push([0, src]);
+          //nodesPath[0] = [0];
+
+          for (let i=0;i<nbrNodes;i++) {
+            nodesPath[i] = [0];
+          }
+
           dist[src] = 0;
    
           /* Looping till priority queue becomes empty (or all distances are not finalized) */
@@ -271,7 +294,8 @@ export function shortestPath(graph,src)
               // has to be done this way to keep the vertices sorted distance (distance must be first item in pair)
               let u = pq[0][1];
               pq.shift();
-   
+
+            
 
             const connectedNodes = [];
             const edgesForThisNode = graph.getEdgesForNode(u);    // Returns An array of class Edges
@@ -296,14 +320,27 @@ export function shortestPath(graph,src)
                           if(a[0] == b[0]) return a[1] - b[1];
                           return a[0] - b[0];
                       });
+
+                      nodesPath[v].push(u);
+
+                      counts[v] = counts[u] + 1;
+
+                      console.log("counts[" + v + "] increment to " + counts[v]);
+           
+
+                     
+                      
+
+                      //nodesPath.push(v);
                   }
               }
           }
    
-          // Print shortest distances stored in dist[]
-          console.log("Dijkstra Distances from Node 0 to node#");
-          for (let i = 0; i < nbrNodes; ++i)
-            console.log(i + " --> " + dist[i]);
+
+          console.log("Nodes in Path:");
+          console.log(nodesPath);
+          
+          return dist;
   }
   
 

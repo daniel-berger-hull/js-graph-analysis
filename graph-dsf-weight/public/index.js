@@ -44,6 +44,9 @@ const setEventHandlers  = () => {
      dfsAllPathButton.addEventListener("click", dfsAllPathButtonClickHandler );
 
 
+     const disjkstrasButton = document.getElementById("disjkstras-button");
+     disjkstrasButton.addEventListener("click", disjkstrasButtonClickHandler );
+     
      const radioButtons = ["circular-rendering","concentric-rendering","random-rendering"];
 
 
@@ -51,7 +54,6 @@ const setEventHandlers  = () => {
 
         const radioButton = document.getElementById(radioID);
         radioButton.addEventListener("click", renderingButtonClickHandler );
-
      });
      
 
@@ -63,12 +65,10 @@ const  keydownHandler = (event)  => {
      
         hideWarningMessage();
     }
-   
 }
 
 
 const windowResizeHandler = () => {
-
 
     const canvas = document.getElementById("graph-canvas");
     canvas.width = window.innerWidth - 60;
@@ -76,36 +76,35 @@ const windowResizeHandler = () => {
     render();        
 }
 
+
+
 const dfsButtonClickHandler  = () => {
 
+    const textBox = document.getElementById("NodeToWorkOn");
     const value = document.getElementById("NodeToWorkOn").value;
 
     if( isNaN(value) )   {
-        displayWarningMessage("Not numeric value entered!");
+        displayWarningMessage("Not numeric value entered!",textBox);
         return;
     }
     
 
-      if ( (value < 0) || (value > graphObject.size()) ) {
+    if ( (value < 0) || (value > graphObject.size()) ) {
 
-        displayWarningMessage("Invalid Node Index entered!");
-        return;
-      }
+      displayWarningMessage("Invalid Node Index entered!",textBox);
+      return;
+    }
     
-      graphObject.setSelectedNode(value);
+    graphObject.setSelectedNode(value);
 
-      render();
-
+    render();
 }
 
 const dfsAllPathButtonClickHandler  = () => {
 
-
     const nbrNodes = graphObject.size();
 
     console.log("Find path for all " + nbrNodes + "Nodes");
-
-
 
     for (let i=0;i<nbrNodes;i++) {
 
@@ -120,6 +119,53 @@ const dfsAllPathButtonClickHandler  = () => {
 
     }
 }
+
+
+const disjkstrasButtonClickHandler  = () => {
+
+
+    const startNode = document.getElementById("DisjkstrasStartNode");
+    const endNode  = document.getElementById("DisjkstrasEndNode");
+
+    const startNodeIndex =  parseInt(startNode.value);
+    const endNodeIndex =  parseInt(endNode.value);
+      
+    if( isNaN(startNodeIndex) )   {
+        displayWarningMessage("Not numeric value entered for start Node!",startNode);
+        return;
+    }
+    if( isNaN(endNodeIndex) )   {
+        displayWarningMessage("Not numeric value entered for end Node!",endNode);
+        return;
+    }
+
+    
+
+      if ( (startNodeIndex < 0) || (startNodeIndex >= graphObject.getNbrNodes()) ) {
+
+        displayWarningMessage("Invalid Start Node Index entered!",startNode);
+        return;
+      }
+
+      if ( (endNodeIndex < 0) || (endNodeIndex >= graphObject.getNbrNodes()) ) {
+
+        displayWarningMessage("Invalid End Node Index entered!",endNode);
+        return;
+      }
+    
+      const dist =  shortestPath(graphObject,startNodeIndex);
+
+      console.log(`Dijkstra: Start/End Node [${startNodeIndex},${endNodeIndex}] , cost = ${dist[endNodeIndex]}`) ;
+
+      console.log("Distances from Node 0 to node#");
+      for (let i = 0; i < dist.length; ++i)
+        console.log(i + " --> " + dist[i]);
+
+
+      render();
+}
+
+
 
 const renderingButtonClickHandler = (event) => {
 
@@ -149,51 +195,22 @@ export const init = () => {
 
     const nbrNodes = 8;
     
-    
-    // Nov 3: this section should go and use the GraphObject instead...
-    // graph = new Graph(nbrNodes);
-    // console.log("Init callled total nodes number is " + nbrNodes);
-    // for (let i=0;i<nbrNodes;i++) {
-
-    //     const nodeValue = Math.round( Math.random() * MAX_NODE_VALUE ) + 1;
-    //     const edges = getRandomEdgeIndexes(i,nbrNodes);
-
-    //     console.log(`${i} -- ${edges} `);
-
-    //     edges.forEach(index => {
-    //         graph.addEdge(i, index);
-    //     });
-
-    //     graph.setNodeValue(i,nodeValue);
-
-    // }
-
-
     setEventHandlers();
 
-    initBellman(nbrNodes);
+    // initBellman(nbrNodes);
     initDijkstra(9);
 
     // By default, the rendering mode is circular
     document.getElementById('circular-rendering').checked = true;
-
 }
 
 function initBellman (nbrNodes) {
 
     const V = 7;
     const E = nbrNodes;
-    graphObject = new GraphObject(V, E);
+    graphObject = new GraphObject(V);
+    
 
-    // Nov 3
-    // graphObject.edges[0] = new Edge(0, 1, 1);
-    // graphObject.edges[1] = new Edge(0, 2, 4);
-    // graphObject.edges[2] = new Edge(1, 2, 3);
-    // graphObject.edges[3] = new Edge(1, 3, 2);
-    // graphObject.edges[4] = new Edge(1, 4, 2);
-    // graphObject.edges[5] = new Edge(3, 2, 5);
-    // graphObject.edges[6] = new Edge(3, 1, 1);
-    // graphObject.edges[7] = new Edge(4, 3, 3);
 
     graphObject.addEdge(0, 1, 1);
     graphObject.addEdge(0, 2, 4);
@@ -223,9 +240,10 @@ function initBellman (nbrNodes) {
 function initDijkstra(nbrNodes) {
    
     
-    const V = 7;
-    const E = 9;
-    graphObject2 = new GraphObject(nbrNodes, 14);
+    // const V = 7;
+    // const E = 9;
+    graphObject2 = new GraphObject(nbrNodes);
+    
 
     graphObject2.addEdge(0, 1, 4);
     graphObject2.addEdge(0, 7, 8);
@@ -241,11 +259,25 @@ function initDijkstra(nbrNodes) {
     graphObject2.addEdge(6, 7, 1);
     graphObject2.addEdge(6, 8, 6);
     graphObject2.addEdge(7, 8, 7);
- 
+
+    graphObject2.addEdge(1, 0, 4);
+    graphObject2.addEdge(7, 0, 8);
+    graphObject2.addEdge(2, 1, 8);
+    graphObject2.addEdge(7, 1, 11);
+    graphObject2.addEdge(3, 2, 7);
+    graphObject2.addEdge(8, 2, 2);
+    graphObject2.addEdge(5, 2, 4);
+    graphObject2.addEdge(4, 3, 9);
+    graphObject2.addEdge(5, 3, 14);
+    graphObject2.addEdge(5, 4, 10);
+    graphObject2.addEdge(6, 5, 2);
+    graphObject2.addEdge(7, 6, 1);
+    graphObject2.addEdge(8, 6, 6);
+    graphObject2.addEdge(8, 7, 7);
 
     shortestPath(graphObject2,0);
 
-
+    graphObject = graphObject2;
 }
 
 
@@ -256,9 +288,6 @@ export const render = () => {
     var canvas = document.getElementById("graph-canvas");
     canvas.width = window.innerWidth - 60;
 
-
-
-    // let renderObject = new GraphRender(canvas,graph,renderingMode);    Nov 03
     let renderObject = new GraphRender(canvas,graphObject,renderingMode);
     renderObject.draw();
 
@@ -273,8 +302,9 @@ export const render = () => {
 /*                        UTILITY METHODS  SECTION                             */
 /////////////////////////////////////////////////////////////////////////////////
 
+let errorOnControl;
 
-const displayWarningMessage = (msg) => {
+const displayWarningMessage = (msg,textBox) => {
 
 
     const errorWarningSection  = document.getElementById("warning-section");
@@ -284,8 +314,11 @@ const displayWarningMessage = (msg) => {
     errorWarningSection.style = "visibility: visible;"
     errorWarningMsg.innerHTML = msg;
 
-
     window.setTimeout(hideWarningMessage, ERROR_MESSAGE_TIMEOUT );
+
+    errorOnControl= textBox;
+    errorOnControl.style = "background-color: #ff8080;"
+
 } 
 
 const hideWarningMessage= () => {
@@ -295,6 +328,8 @@ const hideWarningMessage= () => {
 
     errorWarningSection.style = "visibility: hidden;"
     errorWarningMsg.innerHTML = " "
+   
+    errorOnControl.style = "background-color: white"
 
 }
 
@@ -303,9 +338,11 @@ const hideWarningMessage= () => {
 
 // The Graph Detail Section is at the bottom of the screen, under the Canvas
 const updateGraphDetailSection  = () => {
-
     
-    const nbrNodes =  graphObject.size();
+    const nbrNodes =  graphObject.getNbrNodes();
+    const nbrEdges =  graphObject.getNbrEdges();
+
+
     for (let i=0;i<nbrNodes;i++) {
 
         const nodeValue = Math.round( Math.random() * MAX_NODE_VALUE ) + 1;    
@@ -313,15 +350,16 @@ const updateGraphDetailSection  = () => {
         const edgesForThisNode = graphObject.getEdgesForNode(i);    // An array of class Edges
         const connectedNodes = [];
 
-        edgesForThisNode.forEach(nextEdge => {  connectedNodes.push(nextEdge.dest);   }  );
-
-//        console.log(i + " value is " + " [nodeValue, edges] --> " + graphObject.getEdgesForNode(i));
-        // console.log(i + " value is " + " [nodeValue, edges] --> " + connectedNodes);
-
-        
+        edgesForThisNode.forEach(nextEdge => {  connectedNodes.push(nextEdge.dest);   }  );        
     }
 
     document.getElementById("NodeTotalCount").innerHTML = nbrNodes;
+    document.getElementById("EdgeTotalCount").innerHTML = nbrEdges;
+
+
+
+    
+
 }
 
 
