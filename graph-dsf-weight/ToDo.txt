@@ -1,3 +1,11 @@
+Nov 14, 2023
+------------
+
+  * Got a first draft of list of nodes to follow (instead of just overall cost for a defined node to each nodes)
+
+ To Do:
+ * shortestPath has the nodes list, but in a string, but it would be better to have an array of int, with the index of the nodes
+ 
 
 Nov 13, 2023
 ------------

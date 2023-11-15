@@ -1,7 +1,11 @@
 
 "use strict";
 // import { Graph }      from './model/Graph.js';
-import { BellmanFord, GraphObject, Edge, shortestPath }  from './model/GraphModel.js';
+//import { BellmanFord, GraphObject, Edge, shortestPath }  from './model/GraphModel.js';
+import { GraphObject, Edge }  from './model/GraphModel.js';
+
+import { BellmanFord, shortestPath }  from './model/PathFind.js';
+
 
 import { GraphRender}   from './view/GraphRender.js';
 
@@ -140,7 +144,6 @@ const disjkstrasButtonClickHandler  = () => {
     }
 
     
-
       if ( (startNodeIndex < 0) || (startNodeIndex >= graphObject.getNbrNodes()) ) {
 
         displayWarningMessage("Invalid Start Node Index entered!",startNode);
