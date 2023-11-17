@@ -8,7 +8,9 @@ export const DEFAULT_NODE_VALUE   = 9999;
 export const DEFAULT_EDGE_WEIGHT  = 1;
 
 
-const NO_EDGES_DEFINED = 0;
+export const NO_EDGES_DEFINED = 0;
+export const NODE_NOT_DEFINED  = -1;
+
 
 // a structure to represent a connected, directed and weighted graph
 export class Edge {
@@ -31,6 +33,10 @@ export class GraphObject {
     #nbrNodes;
     #nbrEdges;   // Nov 3: This value appears to be not required, as the getNbrEdges exists for this...
 
+    #startNodePath;
+    #endNodePath;
+
+
 
     constructor(nbrNodes) {
 
@@ -42,6 +48,10 @@ export class GraphObject {
         // Nov 3 Added to align with the older Graph.js --> Each node had no values in GraphObject
         this.values = new Array(nbrNodes);
         this.selectedNode = 0;
+
+        this.#startNodePath = NODE_NOT_DEFINED;
+        this.#endNodePath   = NODE_NOT_DEFINED;
+
     }
 
     size() {
@@ -51,9 +61,13 @@ export class GraphObject {
     getNbrNodes()             {  return this.#nbrNodes;  }
     getNbrEdges()             {  return this.edges.length;  }
 
-
     getSelectedNode()         {   return this.selectedNode; }
+    getStartNodePath()        {   return this.#startNodePath;  }
+    getEndNodePath()          {   return this.#endNodePath;  }
+
     setSelectedNode(index)    {   this.selectedNode = ( index>=0 && index < this.getNbrNodes()) ? index : 0; }
+    setStartNodePath(index)   {   this.#validateNodeIndex(index);     this.#startNodePath= index; }
+    setEndNodePath(index)     {   this.#validateNodeIndex(index);     this.#endNodePath  = index; }
 
     getEdgesForNode(v) {
 

@@ -1,3 +1,11 @@
+Nov 16, 2023
+------------
+
+  * Fixed the Dijkstras method, to return the weight and paths from a node to all the other nodes. The m ethod is  now usefull enough to be used
+  * Fixed the drawing of Dijkstras results (Shortest Path button)
+  
+  
+
 Nov 14, 2023
 ------------
 

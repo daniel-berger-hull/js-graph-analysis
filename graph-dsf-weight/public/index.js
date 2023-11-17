@@ -1,7 +1,5 @@
-
 "use strict";
-// import { Graph }      from './model/Graph.js';
-//import { BellmanFord, GraphObject, Edge, shortestPath }  from './model/GraphModel.js';
+
 import { GraphObject, Edge }  from './model/GraphModel.js';
 
 import { BellmanFord, shortestPath }  from './model/PathFind.js';
@@ -10,7 +8,7 @@ import { BellmanFord, shortestPath }  from './model/PathFind.js';
 import { GraphRender}   from './view/GraphRender.js';
 
 import { CIRCULAR_GRAPH_RENDERING  , CONCENTRIC_GRAPH_RENDERING  ,RANDOM_GRAPH_RENDERING  } from './view/RenderingConstants.js';
- 
+
 
 
 const MAX_NODE_NUMBER = 15;
@@ -20,13 +18,10 @@ const MAX_EDGE_NUMBER  = 2;
 const ERROR_MESSAGE_TIMEOUT = 3000;
 
 
-// let graph;
 let graphObject;
 let graphObject2;
 
-
 let renderingMode = CIRCULAR_GRAPH_RENDERING;
-
 
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -50,7 +45,7 @@ const setEventHandlers  = () => {
 
      const disjkstrasButton = document.getElementById("disjkstras-button");
      disjkstrasButton.addEventListener("click", disjkstrasButtonClickHandler );
-     
+
      const radioButtons = ["circular-rendering","concentric-rendering","random-rendering"];
 
 
@@ -59,14 +54,14 @@ const setEventHandlers  = () => {
         const radioButton = document.getElementById(radioID);
         radioButton.addEventListener("click", renderingButtonClickHandler );
      });
-     
+
 
 }
 
 const  keydownHandler = (event)  => {
-        
+
     if ( event.key === 'Escape') {
-     
+
         hideWarningMessage();
     }
 }
@@ -77,7 +72,7 @@ const windowResizeHandler = () => {
     const canvas = document.getElementById("graph-canvas");
     canvas.width = window.innerWidth - 60;
 
-    render();        
+    render();
 }
 
 
@@ -91,20 +86,22 @@ const dfsButtonClickHandler  = () => {
         displayWarningMessage("Not numeric value entered!",textBox);
         return;
     }
-    
+
 
     if ( (value < 0) || (value > graphObject.size()) ) {
 
       displayWarningMessage("Invalid Node Index entered!",textBox);
       return;
     }
-    
+
     graphObject.setSelectedNode(value);
 
     render();
 }
 
 const dfsAllPathButtonClickHandler  = () => {
+
+    console.log('Testing assignement:');
 
     const nbrNodes = graphObject.size();
 
@@ -116,7 +113,7 @@ const dfsAllPathButtonClickHandler  = () => {
         const path = graphObject.DFS(i);
         console.log(`${i} - ${path}`);
 
-        if (path.length === nbrNodes) 
+        if (path.length === nbrNodes)
             console.log("%cComplete",'color: #00ff00');
         else
             console.log(`%cPartial ${path.length}`,'color: #ff0000');
@@ -133,7 +130,7 @@ const disjkstrasButtonClickHandler  = () => {
 
     const startNodeIndex =  parseInt(startNode.value);
     const endNodeIndex =  parseInt(endNode.value);
-      
+
     if( isNaN(startNodeIndex) )   {
         displayWarningMessage("Not numeric value entered for start Node!",startNode);
         return;
@@ -143,7 +140,7 @@ const disjkstrasButtonClickHandler  = () => {
         return;
     }
 
-    
+
       if ( (startNodeIndex < 0) || (startNodeIndex >= graphObject.getNbrNodes()) ) {
 
         displayWarningMessage("Invalid Start Node Index entered!",startNode);
@@ -155,14 +152,22 @@ const disjkstrasButtonClickHandler  = () => {
         displayWarningMessage("Invalid End Node Index entered!",endNode);
         return;
       }
-    
-      const dist =  shortestPath(graphObject,startNodeIndex);
 
-      console.log(`Dijkstra: Start/End Node [${startNodeIndex},${endNodeIndex}] , cost = ${dist[endNodeIndex]}`) ;
 
+      graphObject.setStartNodePath(startNodeIndex);
+      graphObject.setEndNodePath(endNodeIndex);
+
+      const results = shortestPath(graphObject,startNodeIndex);
+      const distances = results.distances;
+      const paths = results.nodesPath;
+
+
+      console.log(`Dijkstra: Start/End Node [${startNodeIndex},${endNodeIndex}] , cost = ${distances[endNodeIndex]}`) ;
       console.log("Distances from Node 0 to node#");
-      for (let i = 0; i < dist.length; ++i)
-        console.log(i + " --> " + dist[i]);
+      for (let i = 0; i < distances.length; ++i)
+    //    console.log(i + " --> " + distances[i]);
+        console.log(` ${i} --> ${distances[i]}, ${paths[i].length} Nodes,  Path: ${paths[i]}`);
+
 
 
       render();
@@ -182,7 +187,7 @@ const renderingButtonClickHandler = (event) => {
     } else if ( event.currentTarget.id === "random-rendering") {
         console.log("Click random-rendering");
         renderingMode = RANDOM_GRAPH_RENDERING;
-    } 
+    }
 
     render();
 }
@@ -197,7 +202,7 @@ const renderingButtonClickHandler = (event) => {
 export const init = () => {
 
     const nbrNodes = 8;
-    
+
     setEventHandlers();
 
     // initBellman(nbrNodes);
@@ -212,7 +217,7 @@ function initBellman (nbrNodes) {
     const V = 7;
     const E = nbrNodes;
     graphObject = new GraphObject(V);
-    
+
 
 
     graphObject.addEdge(0, 1, 1);
@@ -230,8 +235,8 @@ function initBellman (nbrNodes) {
     for (let i=0;i<graphObject.getNbrNodes();i++) {
         graphObject.setNodeValue(i,i*10);
     }
-    
-    
+
+
 
     console.log(`initBellman:\nNode Count ${graphObject.getNbrNodes()} \nEdge number is  ${graphObject.getNbrEdges()}`);
     // console.log("Nodes Values:")
@@ -241,12 +246,12 @@ function initBellman (nbrNodes) {
 }
 
 function initDijkstra(nbrNodes) {
-   
-    
+
+
     // const V = 7;
     // const E = 9;
     graphObject2 = new GraphObject(nbrNodes);
-    
+
 
     graphObject2.addEdge(0, 1, 4);
     graphObject2.addEdge(0, 7, 8);
@@ -296,7 +301,7 @@ export const render = () => {
 
     updateGraphDetailSection();
     console.log("Render called...");
-   
+
 }
 
 
@@ -322,7 +327,7 @@ const displayWarningMessage = (msg,textBox) => {
     errorOnControl= textBox;
     errorOnControl.style = "background-color: #ff8080;"
 
-} 
+}
 
 const hideWarningMessage= () => {
 
@@ -331,7 +336,7 @@ const hideWarningMessage= () => {
 
     errorWarningSection.style = "visibility: hidden;"
     errorWarningMsg.innerHTML = " "
-   
+
     errorOnControl.style = "background-color: white"
 
 }
@@ -341,27 +346,23 @@ const hideWarningMessage= () => {
 
 // The Graph Detail Section is at the bottom of the screen, under the Canvas
 const updateGraphDetailSection  = () => {
-    
+
     const nbrNodes =  graphObject.getNbrNodes();
     const nbrEdges =  graphObject.getNbrEdges();
 
 
     for (let i=0;i<nbrNodes;i++) {
 
-        const nodeValue = Math.round( Math.random() * MAX_NODE_VALUE ) + 1;    
+        const nodeValue = Math.round( Math.random() * MAX_NODE_VALUE ) + 1;
 
         const edgesForThisNode = graphObject.getEdgesForNode(i);    // An array of class Edges
         const connectedNodes = [];
 
-        edgesForThisNode.forEach(nextEdge => {  connectedNodes.push(nextEdge.dest);   }  );        
+        edgesForThisNode.forEach(nextEdge => {  connectedNodes.push(nextEdge.dest);   }  );
     }
 
     document.getElementById("NodeTotalCount").innerHTML = nbrNodes;
     document.getElementById("EdgeTotalCount").innerHTML = nbrEdges;
-
-
-
-    
 
 }
 
@@ -378,7 +379,7 @@ const getRandomEdgeIndexes = (currentIndex,nbrNodes) => {
         const otherNodeIndex = Math.round( Math.random() * (nbrNodes-1) );
 
         if ( !indexes.includes(otherNodeIndex) && otherNodeIndex !== currentIndex ){
-            
+
             indexes.push(otherNodeIndex);
             j++;
         }
@@ -388,16 +389,9 @@ const getRandomEdgeIndexes = (currentIndex,nbrNodes) => {
 }
 
 
-
-export const main = () => {
-
-    console.log('daniel')
-
-    init();
-    render();
-}
-
-main();
+// Those methods will be called by default during the loading of the script into the  main HTML page...
+init();
+render();
 
 
 

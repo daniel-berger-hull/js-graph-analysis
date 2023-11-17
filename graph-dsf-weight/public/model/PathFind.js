@@ -40,7 +40,10 @@ export function BellmanFord(graph, src) {
  
  
  
-    
+
+//  params:   graph :  GraphObject
+//            src:  integer  --> Starting node index from which we need to find the distance and path to every other nodes in the graphObject
+//  return:   
  export function shortestPath(graph,src) {
  
          const nbrNodes = graph.getNbrNodes();
@@ -51,44 +54,24 @@ export function BellmanFord(graph, src) {
     
            // Create a vector for distances and initialize all
            // distances as infinite (INF)
-           let dist = new Array(nbrNodes).fill(INF);
+           let distances = new Array(nbrNodes).fill(INF);
            let counts = new Array(nbrNodes).fill(0);
            
  
-           //let nodesPath = [];
- 
-           let nodesPath = new Array(nbrNodes);
 
-           let allLetters = new Array(5);
-
-
-
-    allLetters[0] = 'P';
-    allLetters[1] = 'P';
-    allLetters[2] = 'P';
-    allLetters[3] = 'P';
-    allLetters[4] = 'P';
- 
-          
- 
- 
-           //let nodesPath = [];
-           //nodesPath.push(src);
-    
- 
-           //nodesPath.push(src);
+           let allLetters = new Array(nbrNodes);
+           // This is not a perfect solution, as if no character are added at the beginning of the string, it won't be saw as a string, if creates problem as we insert node index...
+            allLetters[0] = 'P';
+            allLetters[1] = 'P';
+            allLetters[2] = 'P';
+            allLetters[3] = 'P';
+            allLetters[4] = 'P';
  
            // Insert source itself in priority queue and initialize
            // its distance as 0.
- //          pq.push([0, src]);   // Nov 13
            pq.push([0, src]);
-           //nodesPath[0] = [0];
  
-           for (let i=0;i<nbrNodes;i++) {
-             nodesPath[i] = [0];
-           }
- 
-           dist[src] = 0;
+           distances[src] = 0;
     
            /* Looping till priority queue becomes empty (or all distances are not finalized) */
            while (pq.length > 0) {
@@ -114,45 +97,34 @@ export function BellmanFord(graph, src) {
                  let weight =  currrentEdge.weight;
                  
                    // If there is shorted path to v through u.
-                   if (dist[v] > dist[u] + weight) {
+                   if (distances[v] > distances[u] + weight) {
                        // Updating distance of v
-                       dist[v] = dist[u] + weight;
-                       pq.push([dist[v], v]);
+                       distances[v] = distances[u] + weight;
+                       pq.push([distances[v], v]);
                        pq.sort((a, b) =>{
                            if(a[0] == b[0]) return a[1] - b[1];
                            return a[0] - b[0];
                        });
  
-                       nodesPath[v].push(u);
- 
                        counts[v] = counts[u] + 1;
-
                        allLetters[v] = allLetters[u] + u;
- 
-                       //console.log("counts[" + v + "] increment to " + counts[v]);
                    }
                }
            }
 
            for (let i=0;i<allLetters.length;i++) {
-            allLetters[i] =  allLetters[i] + i;
-          }
+              allLetters[i] =  allLetters[i] + i;
+           }
 
-    
- 
-           console.log("Nodes in Path:");
-           console.log(nodesPath);
-           console.log("Counts:");
-           console.log(counts);
-           console.log("Distances:");
-           console.log(dist);
+           // Convert the letters with the path, to a set of arrays, as this is more convenient
+            let nodesPath = [];
+            for (let i=0;i<allLetters.length;i++) {
+                nodesPath[i] = Array.from( allLetters[i].slice(1) );
+            }
 
-           console.log('All Letters Array:');
-            console.log(allLetters);
+           return { "distances" : distances,
+                    "nodesPath" : nodesPath};
 
-
-           
-           return dist;
    }
    
  

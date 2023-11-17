@@ -1,6 +1,4 @@
 
-// import { Graph }      from '../model/Graph.js';
-
 import { CIRCULAR_GRAPH_RENDERING  , CONCENTRIC_GRAPH_RENDERING  ,RANDOM_GRAPH_RENDERING  } from './RenderingConstants.js';
 
 
@@ -36,9 +34,7 @@ function circularAnglePositions(n, centerPos, radius ) {
         const x = centerPos.xCenter - Math.round( radius * Math.sin(currentAngle) ); 
         const y = centerPos.yCenter - Math.round( radius * Math.cos(currentAngle) ); 
 
-        //console.log( i + " [x,y] = " + x + "," + y);
         currentAngle += angle;
-
         positions.push( {x:x, y:y} );
     }
 
@@ -162,7 +158,5 @@ function randomPositions(graph, centerPos,radius) {
     }
 
     return positions;
-
-
 }
 
