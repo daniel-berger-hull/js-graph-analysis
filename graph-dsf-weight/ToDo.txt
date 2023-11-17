@@ -1,10 +1,22 @@
+Nov 17, 2023
+------------
+
+ * Added a custom randering, where we can specify manually (with an array) the position of each nodes
+ * Added a bigger version of the graph --> But Dijkstras fails! That is due to the array of letter --> we have index greater than 9, and now 10,11,etc take more than one characters
+
+  To Do:
+    Fix the problem
+
+
 Nov 16, 2023
 ------------
 
   * Fixed the Dijkstras method, to return the weight and paths from a node to all the other nodes. The m ethod is  now usefull enough to be used
   * Fixed the drawing of Dijkstras results (Shortest Path button)
   
-  
+  To Do:
+
+    Have a type of graph where you can explicitely place the position of the nodes (instead to rely on NodeSpaceLocator.js)  
 
 Nov 14, 2023
 ------------

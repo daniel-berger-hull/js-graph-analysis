@@ -1,5 +1,7 @@
 
-import { CIRCULAR_GRAPH_RENDERING  , CONCENTRIC_GRAPH_RENDERING  ,RANDOM_GRAPH_RENDERING  } from './RenderingConstants.js';
+import { CIRCULAR_GRAPH_RENDERING  , CONCENTRIC_GRAPH_RENDERING  ,RANDOM_GRAPH_RENDERING , CUSTOM_GRAPH_RENDERING } from './RenderingConstants.js';
+import { CUSTOM_POSITIONS_ARRAY } from './RenderingConstants.js';
+
 
 
 
@@ -19,7 +21,9 @@ export function determinePos(graph, canvasSpecs, renderingType) {
                 return  concentricPositions( graph, {xCenter: xCenter, yCenter: yCenter}, radius );
             case RANDOM_GRAPH_RENDERING:
                 return randomPositions(graph  ,   {xCenter: xCenter, yCenter: yCenter},radius);  
-    
+            case CUSTOM_GRAPH_RENDERING:
+                 return customPositions(graph  ,   {xCenter: xCenter, yCenter: yCenter},100, CUSTOM_POSITIONS_ARRAY);  
+        
         }
                                              
 }
@@ -158,5 +162,71 @@ function randomPositions(graph, centerPos,radius) {
     }
 
     return positions;
+}
+
+function customPositions(graph, centerPos,radius,customPositionsArray) {
+    const n =  graph.size();
+    let positions = [];
+
+
+
+    // console.log("Will display the  location of the nodes");
+    // customPositionsArray.forEach( element => console.log(element));
+
+
+    //Can't use the center position ,as the custom coordinates are based on the coords of a grid (Top left being 1,1 and bottom right being MaxX,MaxY)
+    //So this division is just a simple patch for now...
+    //For instance, we should find the distance between the min X and max X coords, and adjust the graph size accordingly. Make the same for the Y axis...
+    const startX = centerPos.xCenter / 2;
+    const startY = centerPos.yCenter / 2;
+
+    const ranges = getCustomPositionRange(customPositionsArray);
+    const graphWidth = ranges.rangeX * radius;
+    const graphHeight = ranges.rangeY * radius;
+    const canvasWidth = centerPos.xCenter * 2;
+    const canvasHeight = centerPos.yCenter * 2;
+    const xMargin =  (canvasWidth - graphWidth)/2;
+    const yMargin =  (canvasHeight - graphHeight)/2;
+    
+
+    
+    for (let i=0;i<n;i++) {
+
+        const customCoord = customPositionsArray[i];
+
+        // Coords start at 1, and not 0, so we must substract one to be accurate...
+        const x = xMargin + ( (customCoord[0]-1) *  radius);   
+        const y = yMargin + ( (customCoord[1]-1) *  radius); 
+
+        positions.push( {x:x, y:y} );
+    }
+
+    return positions;
+}
+
+
+// To be able to center correclty a graph with Custom coordinates, have the range of X coords (Min X to Max X), and  Y coords (Min Y to Max Y) are needed
+// param:     customPositionsArray ==> Array of Array of X,Y pair, one pair for each Nodes in the graph
+// returns:   { rangeX, rangeY }
+function getCustomPositionRange(customPositionsArray){
+
+
+    let minXCoord = customPositionsArray.length, maxXCoord  = 1;
+    let minYCoord = customPositionsArray.length, maxYCoord  = 1;
+
+
+    for (let i=0;i<customPositionsArray.length;i++) {
+
+        const customCoord = customPositionsArray[i];
+
+        if (customCoord[0] > maxXCoord)  maxXCoord = customCoord[0];
+        if (customCoord[0] < minXCoord)  minXCoord = customCoord[0];
+                
+        if (customCoord[1] > maxYCoord)  maxYCoord = customCoord[1];
+        if (customCoord[1] < minYCoord)  minYCoord = customCoord[1];
+
+    }
+
+    return { rangeX: (maxXCoord-minXCoord) , rangeY: (maxYCoord-minYCoord)};
 }
 

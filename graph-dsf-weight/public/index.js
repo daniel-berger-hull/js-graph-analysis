@@ -7,7 +7,7 @@ import { BellmanFord, shortestPath }  from './model/PathFind.js';
 
 import { GraphRender}   from './view/GraphRender.js';
 
-import { CIRCULAR_GRAPH_RENDERING  , CONCENTRIC_GRAPH_RENDERING  ,RANDOM_GRAPH_RENDERING  } from './view/RenderingConstants.js';
+import { CIRCULAR_GRAPH_RENDERING  , CONCENTRIC_GRAPH_RENDERING  ,RANDOM_GRAPH_RENDERING,  CUSTOM_GRAPH_RENDERING  } from './view/RenderingConstants.js';
 
 
 
@@ -46,7 +46,7 @@ const setEventHandlers  = () => {
      const disjkstrasButton = document.getElementById("disjkstras-button");
      disjkstrasButton.addEventListener("click", disjkstrasButtonClickHandler );
 
-     const radioButtons = ["circular-rendering","concentric-rendering","random-rendering"];
+     const radioButtons = ["circular-rendering","concentric-rendering","random-rendering","custom-rendering"];
 
 
      radioButtons.forEach( radioID => {
@@ -187,6 +187,9 @@ const renderingButtonClickHandler = (event) => {
     } else if ( event.currentTarget.id === "random-rendering") {
         console.log("Click random-rendering");
         renderingMode = RANDOM_GRAPH_RENDERING;
+    } else if ( event.currentTarget.id === "custom-rendering") {
+        console.log("Click custom-rendering");
+        renderingMode = CUSTOM_GRAPH_RENDERING;
     }
 
     render();
@@ -201,12 +204,12 @@ const renderingButtonClickHandler = (event) => {
 
 export const init = () => {
 
-    const nbrNodes = 8;
+    const nbrNodes = 9;
 
     setEventHandlers();
 
     // initBellman(nbrNodes);
-    initDijkstra(9);
+    initDijkstra(nbrNodes);
 
     // By default, the rendering mode is circular
     document.getElementById('circular-rendering').checked = true;
@@ -247,45 +250,54 @@ function initBellman (nbrNodes) {
 
 function initDijkstra(nbrNodes) {
 
+    graphObject = new GraphObject(nbrNodes);
 
-    // const V = 7;
-    // const E = 9;
-    graphObject2 = new GraphObject(nbrNodes);
+    graphObject.addEdge(0, 1, 4);
+    graphObject.addEdge(0, 7, 8);
+    graphObject.addEdge(1, 2, 8);
+    graphObject.addEdge(1, 7, 11);
+    graphObject.addEdge(2, 3, 7);
+    graphObject.addEdge(2, 8, 2);
+    graphObject.addEdge(2, 5, 4);
+    graphObject.addEdge(3, 4, 9);
+    graphObject.addEdge(3, 5, 14);
+    graphObject.addEdge(4, 5, 10);
+    graphObject.addEdge(5, 6, 2);
+    graphObject.addEdge(6, 7, 1);
+    graphObject.addEdge(6, 8, 6);
+    graphObject.addEdge(7, 8, 7);
+
+    graphObject.addEdge(1, 0, 4);
+    graphObject.addEdge(7, 0, 8);
+    graphObject.addEdge(2, 1, 8);
+    graphObject.addEdge(7, 1, 11);
+    graphObject.addEdge(3, 2, 7);
+    graphObject.addEdge(8, 2, 2);
+    graphObject.addEdge(5, 2, 4);
+    graphObject.addEdge(4, 3, 9);
+    graphObject.addEdge(5, 3, 14);
+    graphObject.addEdge(5, 4, 10);
+    graphObject.addEdge(6, 5, 2);
+    graphObject.addEdge(7, 6, 1);
+    graphObject.addEdge(8, 6, 6);
+    graphObject.addEdge(8, 7, 7);
+
+    /// Graph #2 start here...
+    // Note Nov 17: Would can't use it for now, till the array of letter problem , in the PathFind.js :: shortestPath method is not fixex...
+    // graphObject.addEdge(9,0, 7);
+    // graphObject.addEdge(10,9, 18);
+    // graphObject.addEdge(11, 10, 8);
+    // graphObject.addEdge(15, 11,12);
+    // graphObject.addEdge(12, 15, 2);
+    // graphObject.addEdge(9, 12, 6);
+    // graphObject.addEdge(14, 12, 5);
+    // graphObject.addEdge(13, 14, 9);
+    
 
 
-    graphObject2.addEdge(0, 1, 4);
-    graphObject2.addEdge(0, 7, 8);
-    graphObject2.addEdge(1, 2, 8);
-    graphObject2.addEdge(1, 7, 11);
-    graphObject2.addEdge(2, 3, 7);
-    graphObject2.addEdge(2, 8, 2);
-    graphObject2.addEdge(2, 5, 4);
-    graphObject2.addEdge(3, 4, 9);
-    graphObject2.addEdge(3, 5, 14);
-    graphObject2.addEdge(4, 5, 10);
-    graphObject2.addEdge(5, 6, 2);
-    graphObject2.addEdge(6, 7, 1);
-    graphObject2.addEdge(6, 8, 6);
-    graphObject2.addEdge(7, 8, 7);
 
-    graphObject2.addEdge(1, 0, 4);
-    graphObject2.addEdge(7, 0, 8);
-    graphObject2.addEdge(2, 1, 8);
-    graphObject2.addEdge(7, 1, 11);
-    graphObject2.addEdge(3, 2, 7);
-    graphObject2.addEdge(8, 2, 2);
-    graphObject2.addEdge(5, 2, 4);
-    graphObject2.addEdge(4, 3, 9);
-    graphObject2.addEdge(5, 3, 14);
-    graphObject2.addEdge(5, 4, 10);
-    graphObject2.addEdge(6, 5, 2);
-    graphObject2.addEdge(7, 6, 1);
-    graphObject2.addEdge(8, 6, 6);
-    graphObject2.addEdge(8, 7, 7);
-
-    shortestPath(graphObject2,0);
-
-    graphObject = graphObject2;
+    shortestPath(graphObject,0);
+    //graphObject = graphObject;
 }
 
 

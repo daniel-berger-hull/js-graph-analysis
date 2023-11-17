@@ -79,12 +79,8 @@ body {
 }
 
 
-
 #graph-distribution-radio-section {
    margin: auto;
-   /* width: 100%; */
-   
-   background-color: blue;
 }
 
 #graph-distribution-list {

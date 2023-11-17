@@ -59,13 +59,15 @@ export function BellmanFord(graph, src) {
            
  
 
-           let allLetters = new Array(nbrNodes);
+           //let allLetters = new Array(nbrNodes);
+           let allLetters = new Array(nbrNodes).fill('P');
+           
            // This is not a perfect solution, as if no character are added at the beginning of the string, it won't be saw as a string, if creates problem as we insert node index...
-            allLetters[0] = 'P';
-            allLetters[1] = 'P';
-            allLetters[2] = 'P';
-            allLetters[3] = 'P';
-            allLetters[4] = 'P';
+            // allLetters[0] = 'P';
+            // allLetters[1] = 'P';
+            // allLetters[2] = 'P';
+            // allLetters[3] = 'P';
+            // allLetters[4] = 'P';
  
            // Insert source itself in priority queue and initialize
            // its distance as 0.
