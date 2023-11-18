@@ -100,17 +100,31 @@ export class GraphObject {
 
 
       // Function to add an edge into the graph
-      addEdge(fromNode, toNode, weight)
-      {
+    addEdge(fromNode, toNode, weight) {
   
-          this.#validateNodeIndex(fromNode, "addEdge");
-          this.#validateNodeIndex(toNode, "addEdge");
-          this.#validateEdgeWeight(weight, "addEdge");
-
-          
-          this.edges.push(new Edge(fromNode, toNode, weight));
-                  
+        this.#validateNodeIndex(fromNode, "addEdge");
+        this.#validateNodeIndex(toNode, "addEdge");
+        this.#validateEdgeWeight(weight, "addEdge");
+  
+        this.edges.push(new Edge(fromNode, toNode, weight));
     }
+
+    addDoubleEdge(fromNode, toNode) {
+        this.addDoubleEdge(fromNode, toNode, DEFAULT_EDGE_WEIGHT);
+        this.addDoubleEdge(toNode, fromNode, DEFAULT_EDGE_WEIGHT);
+    }
+
+       // Function to add an edge on both direction into the graph. This methods add simplicity when created double linked nodes, as we don't have to call twice the addEdge
+    addDoubleEdge(fromNode, toNode, weight) {
+  
+        this.#validateNodeIndex(fromNode, "addEdge");
+        this.#validateNodeIndex(toNode, "addEdge");
+        this.#validateEdgeWeight(weight, "addEdge");
+  
+        this.edges.push(new Edge(fromNode, toNode, weight));
+    }
+
+
 
     getNodeValue(v) {
 

@@ -22,7 +22,7 @@ export function determinePos(graph, canvasSpecs, renderingType) {
             case RANDOM_GRAPH_RENDERING:
                 return randomPositions(graph  ,   {xCenter: xCenter, yCenter: yCenter},radius);  
             case CUSTOM_GRAPH_RENDERING:
-                 return customPositions(graph  ,   {xCenter: xCenter, yCenter: yCenter},100, CUSTOM_POSITIONS_ARRAY);  
+                 return customPositions(graph  ,   {xCenter: xCenter, yCenter: yCenter},60, CUSTOM_POSITIONS_ARRAY);  
         
         }
                                              

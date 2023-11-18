@@ -204,7 +204,7 @@ const renderingButtonClickHandler = (event) => {
 
 export const init = () => {
 
-    const nbrNodes = 9;
+    const nbrNodes = 16;
 
     setEventHandlers();
 
@@ -220,7 +220,6 @@ function initBellman (nbrNodes) {
     const V = 7;
     const E = nbrNodes;
     graphObject = new GraphObject(V);
-
 
 
     graphObject.addEdge(0, 1, 1);
@@ -239,65 +238,43 @@ function initBellman (nbrNodes) {
         graphObject.setNodeValue(i,i*10);
     }
 
-
-
-    console.log(`initBellman:\nNode Count ${graphObject.getNbrNodes()} \nEdge number is  ${graphObject.getNbrEdges()}`);
-    // console.log("Nodes Values:")
-    // for (let i=0;i<graphObject.getNbrNodes();i++) {
-    //     console.log(`${i}  -> ${graphObject.getNodeValue(i)}`)
-    // }
 }
 
 function initDijkstra(nbrNodes) {
 
     graphObject = new GraphObject(nbrNodes);
 
-    graphObject.addEdge(0, 1, 4);
-    graphObject.addEdge(0, 7, 8);
-    graphObject.addEdge(1, 2, 8);
-    graphObject.addEdge(1, 7, 11);
-    graphObject.addEdge(2, 3, 7);
-    graphObject.addEdge(2, 8, 2);
-    graphObject.addEdge(2, 5, 4);
-    graphObject.addEdge(3, 4, 9);
-    graphObject.addEdge(3, 5, 14);
-    graphObject.addEdge(4, 5, 10);
-    graphObject.addEdge(5, 6, 2);
-    graphObject.addEdge(6, 7, 1);
-    graphObject.addEdge(6, 8, 6);
-    graphObject.addEdge(7, 8, 7);
 
-    graphObject.addEdge(1, 0, 4);
-    graphObject.addEdge(7, 0, 8);
-    graphObject.addEdge(2, 1, 8);
-    graphObject.addEdge(7, 1, 11);
-    graphObject.addEdge(3, 2, 7);
-    graphObject.addEdge(8, 2, 2);
-    graphObject.addEdge(5, 2, 4);
-    graphObject.addEdge(4, 3, 9);
-    graphObject.addEdge(5, 3, 14);
-    graphObject.addEdge(5, 4, 10);
-    graphObject.addEdge(6, 5, 2);
-    graphObject.addEdge(7, 6, 1);
-    graphObject.addEdge(8, 6, 6);
-    graphObject.addEdge(8, 7, 7);
+    graphObject.addDoubleEdge(0, 1, 4);
+    graphObject.addDoubleEdge(0, 7, 8);
+    graphObject.addDoubleEdge(1, 2, 8);
+    graphObject.addDoubleEdge(1, 7, 11);
+    graphObject.addDoubleEdge(2, 3, 7);
+    graphObject.addDoubleEdge(2, 8, 2);
+    graphObject.addDoubleEdge(2, 5, 4);
+    graphObject.addDoubleEdge(3, 4, 9);
+    graphObject.addDoubleEdge(3, 5, 14);
+    graphObject.addDoubleEdge(4, 5, 10);
+    graphObject.addDoubleEdge(5, 6, 2);
+    graphObject.addDoubleEdge(6, 7, 1);
+    graphObject.addDoubleEdge(6, 8, 6);
+    graphObject.addDoubleEdge(7, 8, 7);
 
+  
     /// Graph #2 start here...
     // Note Nov 17: Would can't use it for now, till the array of letter problem , in the PathFind.js :: shortestPath method is not fixex...
-    // graphObject.addEdge(9,0, 7);
-    // graphObject.addEdge(10,9, 18);
-    // graphObject.addEdge(11, 10, 8);
-    // graphObject.addEdge(15, 11,12);
-    // graphObject.addEdge(12, 15, 2);
-    // graphObject.addEdge(9, 12, 6);
-    // graphObject.addEdge(14, 12, 5);
-    // graphObject.addEdge(13, 14, 9);
+    graphObject.addDoubleEdge(9,0, 7);
+    graphObject.addDoubleEdge(10,9, 10);
+    graphObject.addDoubleEdge(11, 10, 8);
+    graphObject.addDoubleEdge(15, 11,12);
+    graphObject.addDoubleEdge(12, 15, 2);
+    graphObject.addDoubleEdge(9, 12, 6);
+    graphObject.addDoubleEdge(14, 12, 5);
+    graphObject.addDoubleEdge(13, 14, 9);
+    graphObject.addDoubleEdge(5, 11, 3);
+    graphObject.addDoubleEdge(6, 10, 3);
     
-
-
-
     shortestPath(graphObject,0);
-    //graphObject = graphObject;
 }
 
 

@@ -57,17 +57,15 @@ export function BellmanFord(graph, src) {
            let distances = new Array(nbrNodes).fill(INF);
            let counts = new Array(nbrNodes).fill(0);
            
- 
-
-           //let allLetters = new Array(nbrNodes);
-           let allLetters = new Array(nbrNodes).fill('P');
-           
            // This is not a perfect solution, as if no character are added at the beginning of the string, it won't be saw as a string, if creates problem as we insert node index...
-            // allLetters[0] = 'P';
-            // allLetters[1] = 'P';
-            // allLetters[2] = 'P';
-            // allLetters[3] = 'P';
-            // allLetters[4] = 'P';
+          // let allLetters = new Array(nbrNodes).fill('P');
+
+           let  paths = new Array(nbrNodes);
+           for(let i = 0; i < paths.length; i++){ 
+             paths[i] = [];
+           }
+
+           
  
            // Insert source itself in priority queue and initialize
            // its distance as 0.
@@ -109,20 +107,17 @@ export function BellmanFord(graph, src) {
                        });
  
                        counts[v] = counts[u] + 1;
-                       allLetters[v] = allLetters[u] + u;
+                       paths[v] = [...paths[u],u];
                    }
                }
            }
 
-           for (let i=0;i<allLetters.length;i++) {
-              allLetters[i] =  allLetters[i] + i;
-           }
+           for (let i=0;i<paths.length;i++)   paths[i].push(i);
+           
 
            // Convert the letters with the path, to a set of arrays, as this is more convenient
             let nodesPath = [];
-            for (let i=0;i<allLetters.length;i++) {
-                nodesPath[i] = Array.from( allLetters[i].slice(1) );
-            }
+            for (let i=0;i<paths.length;i++)  nodesPath[i] = Array.from( paths[i] );                
 
            return { "distances" : distances,
                     "nodesPath" : nodesPath};
